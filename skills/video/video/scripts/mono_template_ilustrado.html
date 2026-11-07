@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Unbounded"; font-weight: 600; src: url("assets/fonts/unbounded-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Unbounded"; font-weight: 800; src: url("assets/fonts/unbounded-latin-800-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 600; src: url("assets/fonts/jetbrains-mono-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      :root { --ink: #070a1a; --white: #f4f7ff; --cyan: #22e6ff; --violet: #8b5cf6; --gold: #ffc83d; --coral: #ff5d8f; --line: #120a1c; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); }
+      body { font-family: "Inter", sans-serif; color: var(--white); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ink); }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .layer { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+
+      /* ---------- scene 1 · space ---------- */
+      #s1 { background: radial-gradient(ellipse 90% 60% at 50% 30%, rgba(13, 20, 64, 0.55) 0%, rgba(5, 6, 15, 0.25) 60%, transparent 100%); }
+      #s1-planet { position: absolute; left: -260px; top: 1180px; width: 1600px; height: 1600px; }
+      #s1-glow { position: absolute; left: -200px; top: 1040px; width: 1480px; height: 500px; border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 60%, rgba(34, 230, 255, 0.35), rgba(139, 92, 246, 0.15) 45%, transparent 70%); }
+      .star { position: absolute; border-radius: 50%; background: #fff; }
+      #shoot { position: absolute; left: 0; top: 0; width: 260px; height: 4px; border-radius: 2px;
+        background: linear-gradient(90deg, transparent, #fff); }
+
+      /* ---------- scene 2 · workshop ---------- */
+      #s2 { background: linear-gradient(180deg, rgba(7, 26, 36, 0.78) 0%, rgba(8, 32, 44, 0.7) 45%, rgba(4, 16, 24, 0.9) 100%); }
+      #s2-floor { position: absolute; left: -540px; right: -540px; top: 1260px; height: 900px; transform-origin: 50% 0; transform: perspective(700px) rotateX(62deg);
+        background-image: linear-gradient(rgba(94, 234, 212, 0.35) 2px, transparent 2px), linear-gradient(90deg, rgba(94, 234, 212, 0.35) 2px, transparent 2px);
+        background-size: 120px 120px; }
+      #s2-horizon { position: absolute; left: 0; right: 0; top: 1150px; height: 220px; background: radial-gradient(ellipse at 50% 100%, rgba(94, 234, 212, 0.35), transparent 70%); }
+      .cube { position: absolute; width: 126px; height: 147px; }
+      #beams { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+
+      /* ---------- scene 3 · neon city ---------- */
+      #s3 { background: linear-gradient(180deg, rgba(26, 11, 61, 0.8) 0%, rgba(42, 15, 79, 0.72) 35%, rgba(18, 8, 42, 0.85) 70%, #07040f 100%); }
+      #moon { position: absolute; left: 870px; top: 640px; width: 130px; height: 130px; border-radius: 50%;
+        background: radial-gradient(circle at 38% 35%, #fff6e0, #f5d7a1 55%, #c99b5e); box-shadow: 0 0 80px rgba(255, 214, 150, 0.55); }
+      .sky { position: absolute; bottom: 0; }
+      .bldg { position: absolute; bottom: 0; border-radius: 4px 4px 0 0; }
+      #sign { position: absolute; left: 150px; right: 150px; top: 330px; height: 140px; border-radius: 26px; border: 6px solid #ff4fd8;
+        display: flex; align-items: center; justify-content: center; background: rgba(20, 5, 40, 0.7);
+        box-shadow: 0 0 40px rgba(255, 79, 216, 0.8), inset 0 0 30px rgba(255, 79, 216, 0.5); }
+      #sign span { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 60px; letter-spacing: 0.04em; color: #fff;
+        text-shadow: 0 0 12px #ff4fd8, 0 0 40px #ff4fd8, 0 0 80px #8b5cf6; }
+      #stage { position: absolute; left: 180px; right: 180px; top: 1282px; height: 70px; border-radius: 50%;
+        background: radial-gradient(ellipse, rgba(34, 230, 255, 0.55), rgba(34, 230, 255, 0.05) 70%); }
+      #spot { position: absolute; left: 290px; top: 600px; width: 500px; height: 740px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.0), rgba(180, 240, 255, 0.18) 60%, rgba(34, 230, 255, 0.28));
+        clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%); }
+      .icon { position: absolute; top: 494px; width: 280px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 12px; }
+      .icon .ring svg { width: 30px; height: 30px; }
+      .icon .ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--cyan); display: flex; align-items: center; justify-content: center;
+        background: rgba(8, 20, 40, 0.75); box-shadow: 0 0 30px rgba(34, 230, 255, 0.7); }
+      .icon b { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 24px; letter-spacing: 0.12em; text-shadow: 0 0 18px var(--cyan); }
+      .bub { position: absolute; font-family: "Inter", sans-serif; font-weight: 600; font-size: 36px; padding: 18px 26px; border-radius: 26px;
+        background: rgba(255, 255, 255, 0.95); color: #12082a; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); white-space: nowrap; }
+
+      /* ---------- scene 4 · ideas & community ---------- */
+      #s4 { background: radial-gradient(ellipse 80% 60% at 50% 45%, rgba(74, 26, 72, 0.78) 0%, rgba(27, 13, 58, 0.72) 55%, rgba(10, 6, 24, 0.9) 100%); }
+      #s4-rays { position: absolute; left: -460px; top: -40px; width: 2000px; height: 2000px; opacity: 0.25;
+        background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255, 255, 255, 0.18) 0deg 6deg, transparent 6deg 18deg); }
+      #qmark { position: absolute; left: 150px; top: 560px; width: 170px; height: 170px; border-radius: 50% 50% 50% 10%; background: #fff; color: #3a1a6b;
+        display: flex; align-items: center; justify-content: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 130px; }
+      #friend { position: absolute; left: 600px; top: 900px; width: 440px; height: 440px; }
+      .say { position: absolute; display: flex; gap: 12px; padding: 20px 26px; border-radius: 28px; background: #fff; }
+      .say i { display: block; width: 18px; height: 18px; border-radius: 50%; background: #3a1a6b; }
+      #link { position: absolute; left: 470px; top: 1080px; width: 240px; height: 10px; border-radius: 5px; transform-origin: 0 50%;
+        background: linear-gradient(90deg, #ff4fd8, var(--cyan)); box-shadow: 0 0 24px #ff4fd8; }
+      .heart { position: absolute; width: 64px; height: 58px; filter: drop-shadow(0 0 14px #ff5d8f); }
+      .crowd { position: absolute; width: 170px; height: 196px; opacity: 0.92; }
+      .burst { position: absolute; width: 330px; height: 330px; }
+
+      /* ---------- scene 5 · warp ---------- */
+      #s5 { background: radial-gradient(circle at 50% 46%, #102a5c 0%, #060c24 45%, #020208 100%); }
+      .wring { position: absolute; left: 540px; top: 990px; width: 600px; height: 600px; margin: -300px 0 0 -300px; border-radius: 50%;
+        border: 6px solid rgba(34, 230, 255, 0.8); box-shadow: 0 0 30px rgba(34, 230, 255, 0.6), inset 0 0 30px rgba(139, 92, 246, 0.6); }
+      #speed { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      .sign { position: absolute; left: 540px; top: 560px; width: 700px; margin-left: -350px; margin-top: -90px; text-align: center;
+        font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 104px; letter-spacing: 0.01em; color: #fff; text-shadow: 0 0 30px var(--cyan); }
+      #plat { position: absolute; left: 400px; top: 760px; width: 640px; height: 640px; }
+      #plat-floor { position: absolute; left: 40px; top: 300px; width: 560px; height: 220px; border-radius: 50%;
+        background: radial-gradient(ellipse, rgba(34, 230, 255, 0.45), rgba(139, 92, 246, 0.15) 60%, transparent 72%); }
+      #you { position: absolute; left: 255px; top: 400px; width: 130px; height: 130px; border-radius: 50%; border: 6px dashed var(--gold);
+        display: flex; align-items: center; justify-content: center; font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 40px; color: var(--gold);
+        box-shadow: 0 0 40px rgba(255, 200, 61, 0.7); background: rgba(255, 200, 61, 0.12); }
+      .pmini { position: absolute; }
+
+      /* ---------- scene 6 · finale ---------- */
+      #s6 { background: radial-gradient(circle at 50% 55%, rgba(27, 42, 107, 0.6) 0%, rgba(11, 15, 46, 0.55) 50%, rgba(3, 4, 9, 0.85) 100%); }
+      #s6-rays { position: absolute; left: -460px; top: 120px; width: 2000px; height: 2000px; opacity: 0.35;
+        background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(34, 230, 255, 0.25) 0deg 5deg, transparent 5deg 15deg, rgba(139, 92, 246, 0.25) 15deg 20deg, transparent 20deg 30deg); }
+      .conf { position: absolute; width: 18px; height: 30px; border-radius: 3px; }
+      #biglogo { position: absolute; left: 0; right: 0; top: 300px; display: flex; flex-direction: column; align-items: center; gap: 26px; }
+      #biglogo .word { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 84px; line-height: 0.95; text-align: center;
+        background: linear-gradient(100deg, var(--white) 10%, var(--cyan) 55%, var(--violet) 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      #cta-btn { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 34px; letter-spacing: 0.04em; padding: 26px 60px; border-radius: 999px;
+        background: linear-gradient(100deg, var(--gold), #ffe08a); color: var(--ink); box-shadow: 0 0 60px rgba(255, 200, 61, 0.55); }
+      #handle { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 44px; color: var(--cyan); }
+
+      /* ---------- hero ---------- */
+      #hero { position: absolute; left: 0; top: 0; width: 800px; height: 800px; }
+      #bustPop { position: absolute; inset: 0; }
+      #bust { position: absolute; inset: 0; transform-origin: 420px 640px; }
+      .mimg { object-fit: contain; }
+      .bustLayer { position: absolute; left: 0; top: 0; width: 800px; height: 800px; }
+      #bustBase { clip-path: path(evenodd, "M0 0 H800 V800 H0 Z M238 486 L312 489 L374 494 L434 486 L446 522 L420 564 L300 570 L234 542 Z"); }
+      #bustJaw { clip-path: polygon(238px 486px, 312px 489px, 374px 494px, 434px 486px, 446px 522px, 420px 564px, 300px 570px, 234px 542px); }
+      #faceSvg { position: absolute; left: 0; top: -220px; width: 800px; height: 1020px; overflow: visible; }
+      #heroHop { position: absolute; inset: 0; }
+      
+
+      /* ---------- chrome ---------- */
+      #logo { position: absolute; left: 0; right: 0; top: 96px; display: flex; align-items: center; justify-content: center; gap: 18px; }
+      #logo .word { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 38px; letter-spacing: 0.02em;
+        background: linear-gradient(100deg, var(--white) 10%, var(--cyan) 55%, var(--violet) 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .head { position: absolute; left: 64px; right: 64px; top: 332px; height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; }
+      .eyeclip { position: absolute; left: 0; right: 0; top: 256px; display: flex; justify-content: center; }
+      .eyebrow { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 26px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--cyan);
+        padding: 8px 18px; border: 2px solid rgba(34, 230, 255, 0.45); border-radius: 999px; background: rgba(7, 10, 26, 0.6); }
+      .display { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 66px; line-height: 1.08; text-transform: uppercase; letter-spacing: -0.01em;
+        text-shadow: 0 5px 0 rgba(0, 0, 0, 0.45), 0 0 34px rgba(34, 230, 255, 0.3); }
+      .display .w { display: inline-block; margin: 0 0.12em; }
+      .accent { color: var(--cyan); }
+      .gold { color: var(--gold); }
+      #wipe { position: absolute; left: -400px; top: -500px; width: 1100px; height: 2900px; opacity: 0.0;
+        background: linear-gradient(90deg, transparent, rgba(34, 230, 255, 0.95) 20%, #ffc83d 50%, rgba(255, 93, 143, 0.95) 80%, transparent); }
+      #flash { position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), rgba(34, 230, 255, 0.35) 30%, transparent 65%); }
+      .cue { position: absolute; left: 72px; right: 72px; top: 1488px; display: flex; justify-content: center; }
+      .cue span { display: block; max-width: 920px; text-align: center; font-family: "Inter", sans-serif; font-weight: 600; font-size: 42px; line-height: 1.25;
+        color: #fff; padding: 12px 24px; border-radius: 16px; background: rgba(4, 5, 10, 0.78); }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="mini" viewBox="0 0 200 230">
+          <path d="M26 230 Q28 152 100 148 Q172 152 174 230 Z" fill="currentColor" stroke="#0a1030" stroke-width="5" />
+          <path d="M64 156 Q100 176 136 156" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="5" />
+          <circle cx="40" cy="96" r="21" fill="#d08a69" stroke="#0a1030" stroke-width="4" /><ellipse cx="42" cy="97" rx="11" ry="13" fill="#9b563f" />
+          <circle cx="160" cy="96" r="21" fill="#d08a69" stroke="#0a1030" stroke-width="4" /><ellipse cx="158" cy="97" rx="11" ry="13" fill="#9b563f" />
+          <circle cx="100" cy="88" r="60" fill="#2b2242" stroke="#0a1030" stroke-width="5" />
+          <path d="M52 66 Q66 26 110 22 Q148 26 156 60 Q136 44 108 44 Q76 44 62 62 Z" fill="#45366e" />
+          <ellipse cx="100" cy="98" rx="46" ry="38" fill="#d08a69" stroke="#0a1030" stroke-width="4" />
+          <ellipse cx="100" cy="128" rx="34" ry="22" fill="#e3a281" stroke="#0a1030" stroke-width="4" />
+          <rect x="48" y="72" width="104" height="32" rx="16" fill="#142a5c" stroke="#0a1030" stroke-width="4" />
+          <rect x="54" y="77" width="92" height="22" rx="11" fill="#1c6fe0" />
+          <rect x="66" y="83" width="22" height="10" rx="5" fill="#e6feff" /><rect x="112" y="83" width="22" height="10" rx="5" fill="#e6feff" />
+          <path d="M60 81 L96 80" stroke="#ffffff" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round" />
+          <path d="M86 132 Q100 142 114 132" fill="none" stroke="#4a1f12" stroke-width="4" stroke-linecap="round" />
+        </symbol>
+        <symbol id="cubeS" viewBox="0 0 120 140">
+          <polygon points="60,2 118,36 60,70 2,36" fill="#7ff5e3" stroke="#22e6ff" stroke-width="2" />
+          <polygon points="2,36 60,70 60,138 2,104" fill="#1f8a9c" stroke="#22e6ff" stroke-width="2" />
+          <polygon points="60,70 118,36 118,104 60,138" fill="#145a72" stroke="#22e6ff" stroke-width="2" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+      <!-- GLOBAL 3D BACKGROUND (receta 3: globo de puntos con arcos) -->
+      <div id="globeClip" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+        <canvas id="globe" width="1080" height="1920" style="position:absolute;inset:0;width:1080px;height:1920px"></canvas>
+      </div>
+      <!-- SCENE 1 · space -->
+      <div id="s1" class="clip scene" data-start="0" data-duration="7.12" data-track-index="0">
+        <div class="layer" id="s1-cam">
+          <div class="layer" id="stars"></div>
+          <div id="shoot"></div>
+        </div>
+      </div>
+
+      <!-- SCENE 2 · workshop -->
+      <div id="s2" class="clip scene" data-start="7.12" data-duration="8.08" data-track-index="0">
+        <div id="s2-horizon"></div>
+        <svg id="s2-plat" viewBox="0 0 1080 500" style="position:absolute;left:0;top:1060px;width:1080px;height:500px">
+          <ellipse cx="560" cy="260" rx="520" ry="120" fill="rgba(94,234,212,0.10)" stroke="#5eead4" stroke-opacity="0.55" stroke-width="4" />
+          <ellipse cx="560" cy="260" rx="380" ry="86" fill="none" stroke="#5eead4" stroke-opacity="0.35" stroke-width="3" />
+          <ellipse cx="560" cy="260" rx="240" ry="54" fill="none" stroke="#ffc83d" stroke-opacity="0.35" stroke-width="3" />
+        </svg>
+        <svg id="beams" viewBox="0 0 1080 1920"></svg>
+        <div class="layer" id="cubes"></div>
+        <div class="layer" id="helpers"></div>
+      </div>
+
+      <!-- SCENE 3 · neon city -->
+      <div id="s3" class="clip scene" data-start="15.2" data-duration="13.28" data-track-index="0">
+        <div class="layer" id="s3-cam">
+          <div id="moon"></div>
+          <div class="layer" id="skyline"></div>
+          <div id="spot"></div>
+          <div id="stage"></div>
+          <div id="sign"><span>MONGLI DAO</span></div>
+          <div class="icon" id="ic1" style="left: 40px"><div class="ring"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="26" r="15" fill="#22e6ff" /><path d="M12 74 Q12 46 40 46 Q68 46 68 74 Z" fill="#22e6ff" /></svg></div><b>PERSONAS</b></div>
+          <div class="icon" id="ic2" style="left: 400px"><div class="ring"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="32" r="22" fill="#ffe680" /><rect x="30" y="54" width="20" height="16" rx="4" fill="#cfd8ff" /></svg></div><b>IDEAS</b></div>
+          <div class="icon" id="ic3" style="left: 760px"><div class="ring"><svg width="80" height="80" viewBox="0 0 120 140"><use href="#cubeS" width="120" height="140" /></svg></div><b>WEB3</b></div>
+          <div class="layer" id="s3crew"></div>
+        </div>
+      </div>
+
+      <!-- SCENE 4 · ideas & community -->
+      <div id="s4" class="clip scene" data-start="28.48" data-duration="14.72" data-track-index="0">
+        <div id="s4-rays"></div>
+        <div id="link"></div>
+        <div class="heart" id="hr1" style="left: 540px; top: 980px"><svg width="64" height="58" viewBox="0 0 64 58"><path d="M32 56 C 4 36, 0 18, 14 8 C 23 2, 30 8, 32 14 C 34 8, 41 2, 50 8 C 64 18, 60 36, 32 56 Z" fill="#ff5d8f"/></svg></div>
+        <div class="heart" id="hr2" style="left: 610px; top: 1030px"><svg width="64" height="58" viewBox="0 0 64 58"><path d="M32 56 C 4 36, 0 18, 14 8 C 23 2, 30 8, 32 14 C 34 8, 41 2, 50 8 C 64 18, 60 36, 32 56 Z" fill="#ff5d8f"/></svg></div>
+        <img id="friend" class="mimg" src="assets/mono/busto.png" alt="" style="filter: drop-shadow(0 0 18px #8b5cf6)" />
+        <div class="say" id="sayA" style="left: 120px; top: 640px"><i></i><i></i><i></i></div>
+        <div class="say" id="sayB" style="left: 760px; top: 800px"><i></i><i></i><i></i></div>
+        <div class="layer" id="crowd"></div>
+        <div class="layer" id="bursts"></div>
+      </div>
+
+      <!-- SCENE 5 · warp -->
+      <div id="s5" class="clip scene" data-start="43.2" data-duration="11.85" data-track-index="0">
+        <svg id="speed" viewBox="0 0 1080 1920"></svg>
+        <div class="layer" id="rings"></div>
+        <div id="plat"><div id="plat-floor"></div><div id="you">TÚ</div></div>
+      </div>
+
+      <!-- SCENE 6 · finale -->
+      <div id="s6" class="clip scene" data-start="55.05" data-duration="__S6DUR__" data-track-index="0">
+        <div id="s6-rays"></div>
+        <div class="layer" id="confetti"></div>
+      </div>
+
+      <!-- HERO (persistent) -->
+      <div id="heroClip" class="clip" data-start="0" data-duration="__DUR__" data-track-index="2">
+        <div id="hero"><div id="heroHop"><div id="bustPop">
+          <div id="bust">
+            <svg class="bustLayer" viewBox="0 0 800 800"><ellipse cx="420" cy="770" rx="250" ry="40" fill="#000" opacity="0.35" /></svg>
+            <img id="bustBase" class="bustLayer" src="assets/mono/busto.png" alt="" />
+            <svg class="bustLayer" viewBox="0 0 800 800">
+              <ellipse id="mouthIn" cx="314" cy="490" rx="62" ry="0.1" fill="#2a0a08" />
+              <ellipse id="tongue" cx="314" cy="496" rx="30" ry="0.1" fill="#c45a6a" />
+            </svg>
+            <img id="bustJaw" class="bustLayer" src="assets/mono/busto.png" alt="" />
+            <svg id="faceSvg" viewBox="0 -220 800 1020" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <clipPath id="glassClip"><rect x="190" y="258" width="266" height="88" rx="38" /></clipPath>
+                <filter id="ledGlow" x="-50%" y="-80%" width="200%" height="260%"><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+                <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14" /></filter>
+              </defs>
+              <rect x="190" y="258" width="266" height="88" rx="38" fill="#04163f" opacity="0.62" />
+              <rect id="visorGlow" x="190" y="258" width="266" height="88" rx="38" fill="#22e6ff" opacity="0.15" />
+              <g clip-path="url(#glassClip)">
+                <g id="eyes" fill="#e6feff" stroke="#e6feff" filter="url(#ledGlow)">
+                  <g id="eN" stroke="none"><rect x="236" y="287" width="64" height="28" rx="14" /><rect x="364" y="289" width="56" height="26" rx="13" /></g>
+                  <g id="eH" fill="none" stroke-width="10" stroke-linecap="round" opacity="0"><path d="M240 312 Q268 280 296 312" /><path d="M366 312 Q392 282 418 312" /></g>
+                  <g id="eW" opacity="0"><rect x="236" y="287" width="64" height="28" rx="14" stroke="none" /><path d="M366 306 Q392 292 418 306" fill="none" stroke-width="10" stroke-linecap="round" /></g>
+                  <g id="eS" stroke="none" opacity="0"><polygon points="268,274 275,292 294,293 279,305 284,324 268,313 252,324 257,305 242,293 261,292" /><polygon points="392,276 398,292 416,293 402,304 406,322 392,312 378,322 382,304 368,293 386,292" /></g>
+                  <g id="eL" stroke="none" opacity="0" fill="#ff7ad9"><path d="M268 322 C 238 302, 251 278, 268 293 C 285 278, 298 302, 268 322 Z" /><path d="M392 322 C 364 302, 376 280, 392 294 C 408 280, 420 302, 392 322 Z" /></g>
+                </g>
+                <rect id="scan" x="170" y="258" width="34" height="88" fill="#ffffff" opacity="0.22" />
+              </g>
+              <path d="M210 270 L300 266" stroke="#ffffff" stroke-opacity="0.6" stroke-width="6" stroke-linecap="round" />
+              <g id="helmet" opacity="0">
+                <path d="M196 196 Q392 -78 606 176 Z" fill="#ffc83d" stroke="#0a1030" stroke-width="8" stroke-linejoin="round" />
+                <path d="M236 176 Q290 70 380 34" fill="none" stroke="#fff3c4" stroke-width="9" stroke-linecap="round" opacity="0.7" />
+                <path d="M372 30 Q392 24 412 30 L420 186 L364 190 Z" fill="#ffd76a" stroke="#0a1030" stroke-width="6" />
+                <path d="M170 204 Q400 150 636 178 L640 206 Q400 182 174 234 Z" fill="#ffb300" stroke="#0a1030" stroke-width="7" stroke-linejoin="round" />
+              </g>
+              <g id="bulb" opacity="0">
+                <circle cx="420" cy="-90" r="84" fill="#fff4a8" opacity="0.5" filter="url(#softGlow)" />
+                <circle cx="420" cy="-95" r="50" fill="#fff6b8" stroke="#0a1030" stroke-width="5" />
+                <rect x="401" y="-48" width="38" height="30" rx="6" fill="#cfd8ff" stroke="#0a1030" stroke-width="4" />
+                <g stroke="#ffe680" stroke-width="7" stroke-linecap="round"><line x1="420" y1="-168" x2="420" y2="-190" /><line x1="358" y1="-142" x2="342" y2="-158" /><line x1="482" y1="-142" x2="498" y2="-158" /><line x1="344" y1="-95" x2="322" y2="-95" /><line x1="496" y1="-95" x2="518" y2="-95" /></g>
+              </g>
+            </svg>
+          </div>
+        </div></div>
+        <div style="display: none"><i id="armR"></i><i id="armL"></i><i id="handR"></i><i id="thumbR"></i><i id="jetpack"></i></div>
+        </div>
+      </div>
+
+      <!-- chrome -->
+__HEADS__
+      <div id="endClip" class="clip" data-start="59.1" data-duration="__ENDDUR__" data-track-index="5">
+        <div id="biglogo">
+          <div class="word">MONGLI DAO</div>
+          <div id="cta-btn">ÚNETE A LA COMUNIDAD</div>
+          <div id="handle">@mongli_dao</div>
+        </div>
+      </div>
+      <div id="flash-clip" class="clip" data-start="0" data-duration="__DUR__" data-track-index="7"><div id="flash"></div><div id="wipe" data-layout-allow-overflow></div></div>
+__CUES__
+      <audio id="vo" src="assets/voz-mono.wav" data-start="0" data-duration="__DUR__" data-track-index="8" data-volume="1"></audio>
+      <audio id="music" src="assets/musica.wav" data-start="0" data-duration="__DUR__" data-track-index="9" data-volume="0.32"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = __DUR__;
+        const MOUTH = __MOUTH__;
+        const CUES = __CUESTARTS__;
+        const HEADS = __HEADSTARTS__;
+        const SC = [0, 7.12, 15.2, 28.48, 43.2, 55.05];
+        function mulberry32(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+        const R = mulberry32(2026);
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, u) => a + (b - a) * u;
+        const NS = "http://www.w3.org/2000/svg";
+        const el = (tag, cls, parent, style) => { const e = document.createElement(tag); if (cls) e.className = cls; if (style) e.setAttribute("style", style); parent.appendChild(e); return e; };
+        const sv = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+        let MI = 0;
+        const miniSvg = (parent, cls, style, color) => {
+          const im = document.createElement("img"); im.src = "assets/mono/busto.png"; im.alt = ""; im.className = cls + " mimg";
+          im.setAttribute("style", style + `;filter:drop-shadow(0 0 12px ${color}) drop-shadow(0 6px 0 rgba(0,0,0,0.25));${MI++ % 2 ? "scale:-1 1;" : ""}`);
+          parent.appendChild(im); return im;
+        };
+        const miniSvgOld = (parent, cls, style, color) => {
+          const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", "0 0 200 230"); s.setAttribute("class", cls); s.setAttribute("style", style);
+          const u = document.createElementNS(NS, "use"); u.setAttribute("href", "#mini"); u.setAttribute("width", "200"); u.setAttribute("height", "230"); u.setAttribute("style", "color:" + color);
+          s.appendChild(u); parent.appendChild(s); return s;
+        };
+        const COLS = ["#22e6ff", "#8b5cf6", "#ff4fd8", "#5eead4", "#ffc83d", "#60a5fa"];
+
+        // ---------- build decor ----------
+        const stars = document.getElementById("stars");
+        for (let i = 0; i < 140; i++) { const s = R() * 3 + 1; el("div", "star tw", stars, `left:${(R() * 1080).toFixed(0)}px;top:${(R() * 1300).toFixed(0)}px;width:${s.toFixed(1)}px;height:${s.toFixed(1)}px;opacity:${(0.3 + R() * 0.7).toFixed(2)}`); }
+
+        const cubes = document.getElementById("cubes");
+        const CUBES = [[628, 1180, 8.08], [754, 1180, 8.55], [565, 1075, 8.96], [691, 1075, 10.8], [817, 1075, 10.95], [628, 970, 12.24], [754, 970, 13.84], [691, 865, 14.0]];
+        CUBES.forEach(([x, y], i) => { const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", "0 0 120 140"); s.setAttribute("class", "cube"); s.setAttribute("id", "cb" + i); s.setAttribute("style", `left:${x}px;top:${y}px`); const u = document.createElementNS(NS, "use"); u.setAttribute("href", "#cubeS"); u.setAttribute("width", "120"); u.setAttribute("height", "140"); s.appendChild(u); cubes.appendChild(s); });
+        const beams = document.getElementById("beams");
+        [[0, 3], [1, 3], [2, 5], [3, 5], [4, 6], [5, 7], [6, 7]].forEach(([a, b]) => { const A = CUBES[a], B = CUBES[b]; sv("line", { x1: A[0] + 63, y1: A[1] + 34, x2: B[0] + 63, y2: B[1] + 34, stroke: "#ffc83d", "stroke-width": "6", "stroke-linecap": "round", class: "beam", "stroke-dasharray": "400", "stroke-dashoffset": "400" }, beams); });
+        const helpers = document.getElementById("helpers");
+        miniSvg(helpers, "abs", "left:950px;top:1180px;width:116px;height:134px", "#ff4fd8").id = "hp1";
+        miniSvg(helpers, "abs", "left:14px;top:1180px;width:116px;height:134px", "#ffc83d").id = "hp2";
+
+        const sky = document.getElementById("skyline");
+        let bx = -20; const RB = mulberry32(9);
+        while (bx < 1080) { const w = 90 + RB() * 120, h = 380 + RB() * 520; el("div", "bldg", sky, `left:${bx.toFixed(0)}px;width:${w.toFixed(0)}px;height:${h.toFixed(0)}px;background:#140a2e;opacity:0.85`); bx += w - 10; }
+        bx = -40;
+        while (bx < 1080) { const w = 120 + RB() * 140, h = 260 + RB() * 380; el("div", "bldg", sky, `left:${bx.toFixed(0)}px;width:${w.toFixed(0)}px;height:${h.toFixed(0)}px;background:repeating-linear-gradient(0deg,transparent 0 34px,rgba(255,214,120,0.0) 34px 36px),repeating-linear-gradient(90deg,#1d0f3f 0 22px,rgba(255,200,90,0.55) 22px 34px,#1d0f3f 34px 52px);border-top:4px solid #ff4fd8;box-shadow:0 -6px 20px rgba(255,79,216,0.45)`); bx += w + 6; }
+
+        const crew = document.getElementById("s3crew");
+        [[50, "#ff4fd8"], [190, "#ffc83d"], [760, "#5eead4"], [900, "#8b5cf6"]].forEach(([x, c], i) => { miniSvg(crew, "abs", `left:${x}px;top:1176px;width:130px;height:150px`, c).id = "sc" + i; });
+        const crowd = document.getElementById("crowd");
+        for (let i = 0; i < 9; i++) { const x = [0, 110, 220, 0, 0, 0, 690, 800, 910][i], y = [1150, 1120, 1150, 2400, 2400, 2400, 1150, 1120, 1150][i]; miniSvg(crowd, "crowd", `left:${x.toFixed(0)}px;top:${y.toFixed(0)}px`, COLS[i % COLS.length]).id = "cw" + i; }
+        const bursts = document.getElementById("bursts");
+        [[10, 600, "#ffc83d"], [710, 610, "#ff4fd8"], [40, 820, "#22e6ff"], [700, 840, "#5eead4"]].forEach(([x, y, c], k) => {
+          const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", "-100 -100 200 200"); s.setAttribute("class", "burst"); s.setAttribute("id", "bu" + k); s.setAttribute("style", `left:${x}px;top:${y}px`);
+          for (let j = 0; j < 16; j++) { const a = (j / 16) * Math.PI * 2; sv("line", { x1: (Math.cos(a) * 30).toFixed(1), y1: (Math.sin(a) * 30).toFixed(1), x2: (Math.cos(a) * 92).toFixed(1), y2: (Math.sin(a) * 92).toFixed(1), stroke: c, "stroke-width": "6", "stroke-linecap": "round" }, s); sv("circle", { cx: (Math.cos(a) * 96).toFixed(1), cy: (Math.sin(a) * 96).toFixed(1), r: "5", fill: "#fff" }, s); }
+          bursts.appendChild(s);
+        });
+
+        const rings = document.getElementById("rings");
+        const RINGT = []; for (let t = 43.25; t < 49.5; t += 0.3) RINGT.push(t);
+        RINGT.forEach((t, i) => { el("div", "wring", rings).id = "wr" + i; });
+        const speed = document.getElementById("speed");
+        for (let i = 0; i < 46; i++) { const a = R() * Math.PI * 2, r0 = 160 + R() * 200, r1 = r0 + 300 + R() * 500; sv("line", { x1: (540 + Math.cos(a) * r0).toFixed(0), y1: (990 + Math.sin(a) * r0).toFixed(0), x2: (540 + Math.cos(a) * r1).toFixed(0), y2: (990 + Math.sin(a) * r1).toFixed(0), stroke: i % 3 ? "#22e6ff" : "#ffffff", "stroke-opacity": "0.6", "stroke-width": (2 + R() * 3).toFixed(1), "stroke-dasharray": "60 900", class: "sl" }, speed); }
+        const plat = document.getElementById("plat");
+        for (let i = 0; i < 6; i++) { const ang = Math.PI / 2 + ((i + 1) / 7) * Math.PI * 2, x = 320 + Math.cos(ang) * 240 - 55, y = 410 + Math.sin(ang) * 120 - 120; miniSvg(plat, "pmini", `left:${x.toFixed(0)}px;top:${y.toFixed(0)}px;width:110px;height:128px;z-index:${Math.round(y)}`, COLS[i % COLS.length]).id = "pm" + i; }
+
+        const conf = document.getElementById("confetti");
+        for (let i = 0; i < 90; i++) el("div", "conf", conf, `left:${(R() * 1080).toFixed(0)}px;top:-60px;background:${COLS[i % COLS.length]}`).id = "cf" + i;
+
+        // ---------- global globe (receta 3) + near bokeh, seek-driven ----------
+        const gcv = document.getElementById("globe"), g = gcv.getContext("2d");
+        const GN = 760, GP = [];
+        for (let i = 0; i < GN; i++) { const y = 1 - (i / (GN - 1)) * 2, r = Math.sqrt(1 - y * y), th = Math.PI * (3 - Math.sqrt(5)) * i; GP.push([Math.cos(th) * r, y, Math.sin(th) * r]); }
+        const RG = mulberry32(77), ARCS = [];
+        for (let k = 0; k < 80; k++) ARCS.push([Math.floor(RG() * GN), Math.floor(RG() * GN)]);
+        const BOKEH = []; for (let i = 0; i < 26; i++) BOKEH.push({ x: RG() * 1080, y: RG() * 1920, r: 6 + RG() * 22, d: 0.6 + RG() * 0.9, c: RG() < 0.5 ? "34,230,255" : RG() < 0.5 ? "255,200,61" : "255,93,143" });
+        const GL = { cx: 540, cy: 2140, R: 820, a: 1, tilt: 1.05 };
+        function proj(p, rot, tilt) {
+          let [x, y, z] = p; const c = Math.cos(rot), s2 = Math.sin(rot);
+          const x1 = x * c - z * s2, z1 = x * s2 + z * c; const ct = Math.cos(tilt), st2 = Math.sin(tilt);
+          const y2 = y * ct - z1 * st2, z2 = y * st2 + z1 * ct; return [x1, y2, z2];
+        }
+        function drawGlobe(t) {
+          g.clearRect(0, 0, 1080, 1920);
+          const camX = Math.sin(t * 0.31) * 34, camY = Math.cos(t * 0.23) * 26;
+          const cx = GL.cx + camX * 0.25, cy = GL.cy + camY * 0.25, Rr = GL.R, rot = t * 0.16;
+          if (GL.a > 0.01) {
+            const atm = g.createRadialGradient(cx, cy, Rr * 0.9, cx, cy, Rr * 1.18);
+            atm.addColorStop(0, `rgba(34,230,255,${(0.22 * GL.a).toFixed(3)})`); atm.addColorStop(1, "rgba(34,230,255,0)");
+            g.fillStyle = atm; g.beginPath(); g.arc(cx, cy, Rr * 1.18, 0, 6.2832); g.fill();
+            const core = g.createRadialGradient(cx - Rr * 0.3, cy - Rr * 0.3, Rr * 0.1, cx, cy, Rr);
+            core.addColorStop(0, `rgba(20,52,120,${(0.55 * GL.a).toFixed(3)})`); core.addColorStop(1, `rgba(7,10,26,${(0.75 * GL.a).toFixed(3)})`);
+            g.fillStyle = core; g.beginPath(); g.arc(cx, cy, Rr, 0, 6.2832); g.fill();
+            for (let i = 0; i < GN; i++) {
+              const [x, y, z] = proj(GP[i], rot, GL.tilt);
+              const sx = cx + x * Rr, sy = cy + y * Rr; if (sy < -20 || sy > 1940) continue;
+              const front = z > 0; const al = (front ? 0.55 + 0.45 * z : 0.14) * GL.a;
+              g.fillStyle = front ? `rgba(160,245,255,${al.toFixed(3)})` : `rgba(139,92,246,${al.toFixed(3)})`;
+              g.beginPath(); g.arc(sx, sy, front ? 2.2 + z * 3.2 : 1.3, 0, 6.2832); g.fill();
+            }
+            // arcs: a new "connection" every 1.1 s, comet travels 1.4 s, tail fades 0.8 s
+            const kNow = Math.floor(t / 1.1);
+            for (let k = Math.max(0, kNow - 2); k <= kNow; k++) {
+              const born = k * 1.1, age = t - born; if (age < 0 || age > 2.2) continue;
+              const rb = born * 0.16, vis = (q) => { const P3 = proj(GP[q], rb, GL.tilt), yy = cy + P3[1] * Rr, xx = cx + P3[0] * Rr; return P3[2] > 0.15 && yy > 120 && yy < 1800 && xx > 60 && xx < 1020; };
+              const RK = mulberry32(1000 + k); let ia = -1, ib = -1;
+              for (let tries = 0; tries < 60 && ib < 0; tries++) { const q = Math.floor(RK() * GN); if (!vis(q)) continue; if (ia < 0) ia = q; else if (q !== ia) ib = q; }
+              if (ib < 0) continue;
+              const A = proj(GP[ia], rot, GL.tilt), B = proj(GP[ib], rot, GL.tilt);
+              const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, mz = (A[2] + B[2]) / 2, ml = Math.hypot(mx, my, mz) || 1, lift = 1.45 / ml;
+              const ax = cx + A[0] * Rr, ay = cy + A[1] * Rr, bx = cx + B[0] * Rr, by = cy + B[1] * Rr, qx = cx + mx * lift * Rr, qy = cy + my * lift * Rr;
+              const pr = Math.min(1, age / 1.4), fade = age > 1.4 ? 1 - (age - 1.4) / 0.8 : 1;
+              g.strokeStyle = `rgba(255,200,61,${(0.85 * fade * GL.a).toFixed(3)})`; g.lineWidth = 5; g.shadowColor = "rgba(255,200,61,0.9)"; g.shadowBlur = 14; g.beginPath(); g.moveTo(ax, ay);
+              const STEPS = 28; for (let j = 1; j <= Math.round(STEPS * pr); j++) { const u = j / STEPS; g.lineTo((1 - u) * (1 - u) * ax + 2 * (1 - u) * u * qx + u * u * bx, (1 - u) * (1 - u) * ay + 2 * (1 - u) * u * qy + u * u * by); }
+              g.stroke(); g.shadowBlur = 0;
+              const u = pr, hx = (1 - u) * (1 - u) * ax + 2 * (1 - u) * u * qx + u * u * bx, hy = (1 - u) * (1 - u) * ay + 2 * (1 - u) * u * qy + u * u * by;
+              g.fillStyle = `rgba(255,240,200,${(fade * GL.a).toFixed(3)})`; g.beginPath(); g.arc(hx, hy, 6, 0, 6.2832); g.fill();
+              g.fillStyle = `rgba(255,200,61,${(0.5 * fade * GL.a).toFixed(3)})`; g.beginPath(); g.arc(ax, ay, 9, 0, 6.2832); g.fill(); g.beginPath(); g.arc(bx, by, 9 * pr, 0, 6.2832); g.fill();
+            }
+          }
+          // near layer: bokeh with stronger parallax (depth)
+          for (const b of BOKEH) {
+            const x = ((b.x + camX * b.d * 1.6 + t * 6 * b.d) % 1180) - 50, y = ((b.y + camY * b.d * 1.6 - t * 14 * b.d) % 2000 + 2000) % 2000 - 40;
+            const gr = g.createRadialGradient(x, y, 0, x, y, b.r * 2);
+            gr.addColorStop(0, `rgba(${b.c},0.22)`); gr.addColorStop(1, `rgba(${b.c},0)`);
+            g.fillStyle = gr; g.beginPath(); g.arc(x, y, b.r * 2, 0, 6.2832); g.fill();
+          }
+        }
+
+        // ---------- hero rig (seek-driven) ----------
+        const face = { lookX: 0, lookY: 0, brow: 0, fly: 0 };
+        const $ = (id) => document.getElementById(id);
+        const bust = $("bust"), jaw = $("bustJaw"), mouthIn = $("mouthIn"), tongue = $("tongue"), eyes = $("eyes"), eN = $("eN");
+        const scan = $("scan"), visorGlow = $("visorGlow");
+        const mouthAt = (t) => { const f = t * 30, i = Math.floor(f), u = f - i; return lerp(MOUTH[i] || 0, MOUTH[i + 1] || 0, u); };
+        const blinkAt = (t) => { const c = (t + 1.3) % 3.7; return c < 0.16 ? 0.12 + 0.88 * Math.abs(c - 0.08) / 0.08 : 1; };
+        function rig(t) {
+          const o = mouthAt(t), talk = (mouthAt(t - 0.12) + o) / 2;
+          const breath = Math.sin(t * 2.1) * 0.006;
+          const rot = Math.sin(t * 1.4) * 1.2 + Math.sin(t * 4.3) * talk * 1.6;
+          const bob = Math.sin(t * 2.1 + 0.4) * 4 - talk * 6;
+          bust.style.transform = `translate(0px, ${bob.toFixed(2)}px) rotate(${rot.toFixed(2)}deg) scale(${(1 + breath).toFixed(4)}, ${(1 - breath).toFixed(4)})`;
+          const d = o * 30;
+          jaw.style.transform = `translate(${(d * 0.12).toFixed(2)}px, ${d.toFixed(2)}px)`;
+          mouthIn.setAttribute("cy", (490 + d / 2).toFixed(2)); mouthIn.setAttribute("ry", Math.max(0.1, d / 2 + 1).toFixed(2));
+          tongue.setAttribute("cy", (488 + d - 3).toFixed(2)); tongue.setAttribute("ry", Math.max(0.1, Math.min(8, d / 3)).toFixed(2));
+          const b = blinkAt(t);
+          eyes.setAttribute("transform", `translate(${face.lookX.toFixed(2)} ${face.lookY.toFixed(2)})`);
+          eN.setAttribute("transform", `translate(0 301) scale(1 ${b.toFixed(3)}) translate(0 -301)`);
+          scan.setAttribute("x", (170 + ((t * 0.5) % 1.4) * 320).toFixed(1));
+          visorGlow.setAttribute("opacity", (0.1 + 0.3 * talk).toFixed(3));
+        }
+
+        const tl = gsap.timeline({ paused: true });
+        // Time map: the choreography below is authored on the reference narration; TMAP ([old, new] pairs from
+        // word-aligned transcripts) moves every position to the voice actually used. Identity when [[0,0],[DUR,DUR]].
+        const TMAP = __TIMEMAP__;
+        const T = (x) => { if (typeof x !== "number") return x; for (let i = 1; i < TMAP.length; i++) { const [a0, b0] = TMAP[i - 1], [a1, b1] = TMAP[i]; if (x <= a1) return b0 + ((b1 - b0) * (x - a0)) / (a1 - a0); } return x; };
+        const raw = { to: tl.to.bind(tl), fromTo: tl.fromTo.bind(tl), set: tl.set.bind(tl) };
+        tl.to = (a, b, p) => raw.to(a, b, T(p));
+        tl.fromTo = (a, b, c, p) => raw.fromTo(a, b, c, T(p));
+        tl.set = (a, b, p) => raw.set(a, b, T(p));
+        const st = { t: 0 };
+        rig(0); drawGlobe(0);
+        tl.to(st, { t: DUR, duration: DUR, ease: "none", onUpdate: () => { rig(st.t); drawGlobe(st.t); } }, 0);
+        // globe framing per scene (far layer): full in S1/S6, calm elsewhere
+        tl.set(GL, { cx: 540, cy: 2140, R: 820, a: 1 }, 0);
+        tl.to(GL, { cx: 900, cy: 420, R: 300, a: 0.55, duration: 0.6, ease: "power3.inOut" }, 6.85);
+        tl.to(GL, { cx: 220, cy: 640, R: 380, a: 0.45, duration: 0.6, ease: "power3.inOut" }, 14.9);
+        tl.to(GL, { cx: 540, cy: 900, R: 620, a: 0.5, duration: 0.6, ease: "power3.inOut" }, 28.2);
+        tl.to(GL, { a: 0, duration: 0.4 }, 43.0);
+        tl.to(GL, { cx: 680, cy: 1500, R: 520, a: 0.6, duration: 0.8, ease: "power3.out" }, 49.4);
+        tl.to(GL, { cx: 540, cy: 820, R: 700, a: 0.75, duration: 0.8, ease: "power3.inOut" }, 54.8);
+
+        // ---------- hero placement per scene ----------
+        const place = (cx, cy, s) => ({ x: cx - 400, y: cy - 400, scale: s * 1.3 });
+        tl.set("#hero", { transformOrigin: "50% 50%", ...place(540, 1000, 0.72) }, 0);
+        tl.fromTo("#heroHop", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 1.4, ease: "expo.out" }, 0.1);
+        tl.to("#heroHop", { y: -12, duration: 1.4, yoyo: true, repeat: 3, ease: "sine.inOut" }, 1.5);
+        tl.set("#hero", place(330, 1000, 0.66), 7.12);
+        tl.fromTo("#hero", { y: place(330, 1000, 0.66).y - 600 }, { y: place(330, 1000, 0.66).y, duration: 0.55, ease: "bounce.out", immediateRender: false }, 7.12);
+        tl.fromTo("#heroHop", { scaleY: 1, scaleX: 1, transformOrigin: "50% 92%" }, { keyframes: { scaleY: [0.82, 1.08, 1], scaleX: [1.12, 0.95, 1] }, duration: 0.45, ease: "power2.out", immediateRender: false }, 7.6);
+        tl.set("#hero", place(540, 1000, 0.72), 15.2);
+        tl.fromTo("#hero", { scale: 0.26, opacity: 0 }, { scale: 0.94, opacity: 1, duration: 0.6, ease: "back.out(1.8)", immediateRender: false }, 15.2);
+        tl.set("#hero", place(330, 1000, 0.66), 28.48);
+        tl.fromTo("#hero", { x: place(330, 1000, 0.66).x - 500 }, { x: place(330, 1000, 0.66).x, duration: 0.6, ease: "expo.out", immediateRender: false }, 28.48);
+        tl.set("#hero", place(540, 990, 0.66), 43.2);
+        tl.set(face, { fly: 1 }, 43.2);
+        tl.fromTo("#heroHop", { y: 0 }, { y: -26, duration: 0.5, yoyo: true, repeat: 11, ease: "sine.inOut", immediateRender: false }, 43.25);
+        tl.to("#hero", { ...place(250, 1010, 0.56), duration: 1.0, ease: "power3.inOut" }, 49.4);
+        tl.set(face, { fly: 0 }, 50.4);
+        tl.set("#hero", place(540, 1000, 0.72), 55.05);
+        tl.fromTo("#hero", { y: place(540, 1000, 0.72).y + 700 }, { y: place(540, 1000, 0.72).y, duration: 0.8, ease: "back.out(1.4)", immediateRender: false }, 55.05);
+        tl.fromTo("#heroHop", { scaleY: 1, scaleX: 1 }, { keyframes: { scaleY: [0.86, 1.06, 1], scaleX: [1.1, 0.96, 1] }, duration: 0.45, ease: "power2.out", immediateRender: false }, 55.6);
+        tl.fromTo("#heroHop", { scaleY: 1, scaleX: 1 }, { keyframes: { scaleY: [0.88, 1.05, 1], scaleX: [1.08, 0.97, 1] }, duration: 0.4, ease: "power2.out", immediateRender: false }, 50.35);
+
+        // ---------- props on the hero ----------
+        tl.set("#helmet", { opacity: 0 }, 0); tl.set("#helmet", { opacity: 1 }, 7.12); tl.set("#helmet", { opacity: 0 }, 15.2);
+        tl.set("#jetpack", { opacity: 0 }, 0); tl.set("#jetpack", { opacity: 1 }, 43.2); tl.set("#jetpack", { opacity: 0 }, 50.4);
+        tl.set("#bulb", { opacity: 0 }, 0);
+        tl.fromTo("#bulb", { opacity: 0, scale: 0.3, svgOrigin: "420 -95" }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(3)", immediateRender: false }, 29.0);
+        tl.to("#bulb", { opacity: 0, duration: 0.3 }, 31.0);
+
+        // ---------- expressions ----------
+        const EY = ["eN", "eH", "eW", "eS", "eL"];
+        const eyesAt = (name, t) => EY.forEach((id) => tl.set("#" + id, { opacity: id === name ? 1 : 0 }, t));
+        [["eN", 0], ["eH", 6.3], ["eN", 7.3], ["eH", 13.84], ["eN", 15.1], ["eS", 15.68], ["eN", 17.0], ["eH", 24.3], ["eN", 25.6], ["eS", 29.04], ["eN", 30.3], ["eL", 33.2], ["eH", 34.5],
+         ["eN", 39.0], ["eW", 50.48], ["eN", 51.2], ["eH", 54.2], ["eN", 55.05], ["eW", 58.65], ["eS", 59.13], ["eH", 60.09]].forEach(([n, t]) => eyesAt(n, t));
+        tl.set(face, { lookX: 0, lookY: 0, brow: 0 }, 0);
+        tl.to(face, { lookX: -14, lookY: -8, brow: -12, duration: 0.25 }, 31.15);
+        tl.to(face, { lookX: 16, lookY: 0, brow: 0, duration: 0.25 }, 32.1);
+        tl.to(face, { lookX: 0, duration: 0.25 }, 33.2);
+        tl.to(face, { lookX: -16, duration: 0.3 }, 44.1);
+        tl.to(face, { lookX: 16, duration: 0.3 }, 45.4);
+        tl.to(face, { lookX: 0, duration: 0.3 }, 47.1);
+        tl.to(face, { lookX: 14, brow: -8, duration: 0.3 }, 49.9);
+        tl.to(face, { lookX: 0, brow: 0, duration: 0.3 }, 51.3);
+
+        // ---------- beats: the bust pops where the vector rig used to gesture ----------
+        [6.3, 10.8, 13.84, 15.68, 27.75, 29.0, 34.45, 37.0, 50.0, 58.0, 59.13].forEach((t) =>
+          tl.fromTo("#bustPop", { scale: 1, transformOrigin: "52% 80%" }, { keyframes: { scale: [1.06, 0.98, 1] }, duration: 0.45, ease: "power2.out", immediateRender: false }, t));
+        // ---------- arm poses (no-ops on hidden stubs in the illustrated version) ----------
+        const R_ = "#armR", L_ = "#armL";
+        tl.set(R_, { svgOrigin: "408 470", rotation: -6 }, 0);
+        tl.set(L_, { svgOrigin: "192 470", rotation: 6 }, 0);
+        const pose = (sel, rot, t, d = 0.32, ease = "back.out(1.6)") => tl.to(sel, { rotation: rot, duration: d, ease }, t);
+        const wave = (sel, base, t, n = 3) => { const sgn = sel === R_ ? -1 : 1; pose(sel, base, t, 0.3); tl.to(sel, { rotation: base + 25 * -sgn, duration: 0.22, yoyo: true, repeat: n, ease: "sine.inOut" }, t + 0.3); };
+        // S1
+        pose(R_, -62, 5.85); pose(L_, 62, 5.85); pose(R_, -6, 6.9); pose(L_, 6, 6.9);
+        // S2
+        pose(R_, -138, 10.7, 0.22); pose(R_, -20, 11.5); wave(L_, 132, 12.15, 3); pose(L_, 6, 13.3);
+        pose(R_, -122, 13.8); pose(L_, 122, 13.8); pose(R_, -6, 14.9); pose(L_, 6, 14.9);
+        // S3
+        wave(R_, -132, 15.25, 3); pose(R_, -8, 16.75);
+        pose(R_, -98, 18.45); pose(R_, -8, 20.3);
+        pose(R_, -62, 24.25); pose(L_, 62, 24.25); pose(R_, -6, 26.9); pose(L_, 6, 26.9);
+        pose(R_, -122, 27.75); pose(L_, 122, 27.75); pose(R_, -6, 28.4, 0.2); pose(L_, 6, 28.4, 0.2);
+        // S4
+        pose(R_, -138, 29.0); pose(R_, -6, 30.25);
+        pose(R_, -98, 32.05); pose(R_, -6, 33.0);
+        pose(R_, -62, 34.45); pose(L_, 62, 34.45);
+        pose(R_, -122, 36.95); pose(L_, 122, 36.95); pose(R_, -6, 38.6); pose(L_, 6, 38.6);
+        pose(R_, -62, 41.45); pose(L_, 62, 41.45); pose(R_, -6, 42.9, 0.25); pose(L_, 6, 42.9, 0.25);
+        // S5
+        pose(R_, -40, 43.3); pose(L_, 40, 43.3);
+        pose(R_, -98, 49.95); pose(L_, 6, 49.95); pose(R_, -6, 51.9);
+        // S6
+        pose(R_, -140, 57.95); tl.set("#handR", { opacity: 1 }, 0); tl.set("#thumbR", { opacity: 0 }, 0);
+        tl.set("#handR", { opacity: 0 }, 58.2); tl.set("#thumbR", { opacity: 1 }, 58.2); tl.set("#handR", { opacity: 1 }, 59.4); tl.set("#thumbR", { opacity: 0 }, 59.4);
+        pose(R_, -8, 59.3); wave(L_, 132, 60.0, 5);
+
+        // ---------- scene 1 ----------
+        tl.fromTo("#s1-cam", { scale: 1.35 }, { scale: 1, duration: 4, ease: "power2.out" }, 0);
+        tl.fromTo(".tw", { opacity: 0.2 }, { opacity: 1, duration: 0.6, stagger: { each: 0.02, repeat: 5, yoyo: true }, ease: "sine.inOut" }, 0);
+        tl.fromTo("#shoot", { x: 1100, y: 120, rotation: 155, opacity: 1 }, { x: -300, y: 620, opacity: 0, duration: 1.1, ease: "power1.in" }, 2.4);
+
+        // ---------- scene 2 ----------
+        CUBES.forEach(([x, y, t], i) => tl.fromTo("#cb" + i, { y: -1300, opacity: 1 }, { y: 0, duration: 0.55, ease: "bounce.out" }, t - 0.2));
+        tl.fromTo(["#hp1", "#hp2"], { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.2, ease: "back.out(2)" }, 12.2);
+        tl.fromTo(".beam", { strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }, 13.84);
+        tl.fromTo(".cube", { filter: "drop-shadow(0 0 0px #ffc83d)" }, { filter: "drop-shadow(0 0 22px #ffc83d)", duration: 0.5, immediateRender: false }, 14.2);
+
+        // ---------- scene 3 ----------
+        tl.fromTo("#s3-cam", { scale: 1.12, y: 120 }, { scale: 1, y: 0, duration: 2.5, ease: "power2.out" }, 15.2);
+        tl.fromTo("#sign", { opacity: 0 }, { keyframes: { opacity: [0, 1, 0.2, 1, 0.4, 1] }, duration: 0.9, ease: "none" }, 15.6);
+        tl.fromTo("#spot", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 15.3);
+        [["#ic1", 18.5], ["#ic2", 19.2], ["#ic3", 19.8]].forEach(([id, t]) => tl.fromTo(id, { opacity: 0, y: 60, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(2.4)" }, t));
+        for (let i = 0; i < 4; i++) tl.fromTo("#sc" + i, { y: 160, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(2)" }, 24.4 + i * 0.12);
+
+        // ---------- scene 4 ----------
+        tl.fromTo("#s4-rays", { rotation: 0 }, { rotation: 30, duration: 14.72, ease: "none" }, 28.48);
+        tl.set(["#friend", "#sayA", "#sayB", "#link", "#hr1", "#hr2"], { opacity: 0 }, 28.48);
+        tl.fromTo("#friend", { opacity: 0, x: 400 }, { opacity: 1, x: 0, duration: 0.5, ease: "expo.out", immediateRender: false }, 31.9);
+        tl.fromTo("#sayA", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 32.15);
+        tl.fromTo("#sayB", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 32.55);
+        tl.fromTo(".say i", { y: 0 }, { y: -10, duration: 0.15, yoyo: true, repeat: 5, stagger: 0.05 }, 32.2);
+        tl.to(["#sayA", "#sayB"], { opacity: 0, duration: 0.2 }, 33.1);
+        tl.fromTo("#link", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.4, ease: "expo.out", immediateRender: false }, 33.2);
+        tl.fromTo(["#hr1", "#hr2"], { opacity: 0, y: 0, scale: 0.4 }, { opacity: 1, y: -160, scale: 1.3, duration: 1.0, stagger: 0.2, ease: "power2.out", immediateRender: false }, 33.3);
+        tl.to(["#hr1", "#hr2"], { opacity: 0, duration: 0.3 }, 34.4);
+        tl.to(["#friend", "#link"], { opacity: 0, duration: 0.3 }, 34.4);
+        tl.to("#hero", { ...place(540, 990, 0.66), duration: 0.5, ease: "power3.inOut" }, 34.45);
+        for (let i = 0; i < 9; i++) tl.fromTo("#cw" + i, { y: 400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.8)" }, 34.5 + i * 0.09);
+        tl.fromTo(".crowd", { rotation: -4 }, { rotation: 4, duration: 0.4, yoyo: true, repeat: 9, stagger: 0.05, ease: "sine.inOut", immediateRender: false }, 35.4);
+        [37.0, 37.45, 37.9, 38.35].forEach((t, k) => tl.fromTo("#bu" + k, { scale: 0.1, opacity: 1 }, { scale: 1.3, opacity: 0, duration: 1.1, ease: "power2.out" }, t));
+
+        // ---------- scene 5 ----------
+        RINGT.forEach((t, i) => tl.fromTo("#wr" + i, { scale: 0.05, opacity: 0 }, { scale: 3.6, keyframes: { opacity: [0, 1, 1, 0] }, duration: 1.3, ease: "power2.in" }, t));
+        tl.fromTo(".sl", { strokeDashoffset: 0 }, { strokeDashoffset: -2400, duration: 6.3, ease: "none" }, 43.2);
+        tl.to("#speed", { opacity: 0, duration: 0.5 }, 49.3);
+        tl.fromTo("#plat", { opacity: 0, scale: 0.6, y: 200 }, { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "expo.out" }, 49.5);
+        tl.fromTo(".pmini", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.07, ease: "back.out(2)" }, 49.7);
+        tl.fromTo("#you", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(3)" }, 50.4);
+        tl.to("#you", { scale: 1.15, duration: 0.35, yoyo: true, repeat: 5, ease: "sine.inOut" }, 51.0);
+
+        // ---------- scene 6 ----------
+        tl.fromTo("#s6-rays", { rotation: 0 }, { rotation: 45, duration: 7.45, ease: "none" }, 55.05);
+        for (let i = 0; i < 90; i++) { const d = 2.2 + R() * 1.6, x = (R() - 0.5) * 300; tl.fromTo("#cf" + i, { y: 620, x: 0, rotation: 0, opacity: 1 }, { y: 2150, x, rotation: 360 + R() * 720, duration: d, ease: "power1.in" }, 58.6 + R() * 1.2); }
+        tl.set(".conf", { opacity: 0 }, 0);
+        tl.fromTo("#biglogo > *", { opacity: 0, y: 60, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: "back.out(2)" }, 59.1);
+        tl.fromTo("#cta-btn", { boxShadow: "0 0 30px rgba(34,230,255,0.4)" }, { boxShadow: "0 0 90px rgba(34,230,255,0.95)", duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, 60.1);
+
+        // ---------- chrome ----------
+        SC.slice(1).forEach((s) => {
+          tl.fromTo("#wipe", { x: -1500, rotation: 14, opacity: 1 }, { x: 1700, rotation: 14, opacity: 1, duration: 0.62, ease: "power2.inOut", immediateRender: false }, s - 0.31);
+          tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.28, duration: 0.1, ease: "power2.out", immediateRender: false }, s - 0.05);
+          tl.to("#flash", { opacity: 0, duration: 0.35, ease: "power2.in" }, s + 0.05);
+        });
+        document.querySelectorAll(".head").forEach((h) => {
+          const s0 = +h.getAttribute("data-start"), e0 = s0 + +h.getAttribute("data-duration"), ws = h.querySelectorAll(".w");
+          ws.forEach((w, j) => { const at = w.dataset.at ? +w.dataset.at : s0 + 0.06 + j * 0.045; raw.fromTo(w, { opacity: 0, y: 40, rotationX: -70 }, { opacity: 1, y: 0, rotationX: 0, duration: 0.42, ease: "back.out(1.8)" }, at); });
+          raw.to(ws, { opacity: 0, y: -18, duration: 0.18, ease: "power2.in" }, e0 - 0.2);
+        });
+        document.querySelectorAll(".eyeclip .eyebrow").forEach((eb) => { const s0 = +eb.parentNode.getAttribute("data-start"); raw.fromTo(eb, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, s0 + 0.1); });
+        CUES.forEach((s, i) => raw.fromTo(`#cue${i} span`, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out" }, s));
+
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>
