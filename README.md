@@ -74,6 +74,7 @@ Al terminar, **cierra y vuelve a abrir Claude Code** y escribe `/` para ver las 
 |---|---|---|
 | **diseno** | Rediseño visual completo de un frontend: sistema de diseño, fondo 3D animado, móvil primero, estados, accesibilidad, SEO. Al final se revisa con capturas. | `/diseno` + lo que quieres cambiar |
 | **diseno1.1** | Lo mismo que `diseno`, más el buscador de estilos de UI/UX Pro Max y la API de Motion verificada. Es la versión que más uso. | `/diseno1.1` o «rediseña con pro max y motion» |
+| **DisenoS** | Rediseño en estilo **bento + brutalismo**: bloques de distintos tamaños, bordes gruesos, sombras duras, colores contrastantes con significado fijo, íconos e ilustraciones en SVG, minimalista y con un flujo más corto (compara los pasos de antes y después). | `/DisenoS` o «estilo bento brutalista» |
 | **ui-ux-pro-max** | Base de datos de diseño: más de 50 estilos, 161 paletas, 57 parejas de fuentes y guías UX para React, Next, Vue, Tailwind, shadcn, etc. Trae un buscador en Python. | Se activa sola al pedir UI, o `/ui-ux-pro-max` |
 | **motion** | Guía para animar en React con Motion (antes Framer Motion): entradas, salidas, stagger, layout, scroll, drag. | «anima esto», «agrega transiciones» |
 | **taste-skill** (`design-taste-frontend`) | Diseño «anti-plantilla» para landings, portafolios y rediseños, para que no se vea hecho por IA. | «haz una landing que no se vea genérica» |
@@ -151,7 +152,7 @@ alfa-skills/
 ├── instalar.ps1          # instalador para Windows
 ├── instalar.sh           # instalador para macOS / Linux
 ├── skills/
-│   ├── diseno-web/       # diseno, diseno1.1, ui-ux-pro-max, motion, taste-skill
+│   ├── diseno-web/       # diseno, diseno1.1, DisenoS, ui-ux-pro-max, motion, taste-skill
 │   ├── video/            # video, videoV2, hyperframes y compañía
 │   ├── heygen/           # avatares, presentadores y doblaje
 │   └── ideas/            # llm-council
@@ -166,6 +167,6 @@ Cada carpeta dentro de `skills/<grupo>/` es una skill completa con su `SKILL.md`
 
 ## Créditos
 
-Las skills **diseno**, **diseno1.1**, **motion**, **video**, **videoV2** y **llm-council** (adaptación) son mías. Las demás son de proyectos abiertos y se incluyen con su licencia: HyperFrames y HeyGen, UI/UX Pro Max y taste-skill. El detalle está en [TERCEROS.md](TERCEROS.md).
+Las skills **diseno**, **diseno1.1**, **DisenoS**, **motion**, **video**, **videoV2** y **llm-council** (adaptación) son mías. Las demás son de proyectos abiertos y se incluyen con su licencia: HyperFrames y HeyGen, UI/UX Pro Max y taste-skill. El detalle está en [TERCEROS.md](TERCEROS.md).
 
 Hecho por **Alfa**.
