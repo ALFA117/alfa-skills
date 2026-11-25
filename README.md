@@ -1,12 +1,46 @@
-# alfa-skills
+<div align="center">
 
-Las skills que uso todos los días en **Claude Code** para diseñar páginas web, animar interfaces, hacer videos e imágenes y pensar ideas. Están todas juntas en un solo repo, separadas por tema, y se instalan con un comando.
+# 🧰 alfa-skills
+
+### Las 20 skills que uso todos los días en Claude Code, instaladas con un solo comando.
+
+Diseño web, animación, videos, imágenes, avatares e ideas, separadas por tema.
+
+[![Instalar](https://img.shields.io/badge/Instalar-1_comando-7c5cff?style=for-the-badge&logo=gnubash&logoColor=white)](#-instalar-1-minuto)
+[![Claude Code](https://img.shields.io/badge/Para-Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-555?style=for-the-badge)](LICENSE)
+
+![Skills](https://img.shields.io/badge/skills-20-8ef0b0)
+![Windows](https://img.shields.io/badge/Windows-PowerShell-5391FE?logo=powershell&logoColor=white)
+![macOS / Linux](https://img.shields.io/badge/macOS_·_Linux-Bash-4EAA25?logo=gnubash&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js_22+-339933?logo=nodedotjs&logoColor=white)
+![Python](https://img.shields.io/badge/Python_3.10+-3776AB?logo=python&logoColor=white)
+![ffmpeg](https://img.shields.io/badge/ffmpeg-007808?logo=ffmpeg&logoColor=white)
+
+<br/>
+
+<img src="docs/img/hero.jpg" alt="Las 20 skills agrupadas en Diseño web (6), Video e imágenes (10), Avatares HeyGen (3) e Ideas (1)" width="100%" />
+
+**[Instalar](#-instalar-1-minuto)** · **[Qué trae](#-qué-trae)** · **[Requisitos](#-requisitos)** · **[Créditos](#-créditos)**
+
+</div>
 
 > **¿Qué es una skill?** Es una carpeta con instrucciones (y a veces scripts) que le enseña a Claude a hacer algo de cierta forma. Cuando la instalas, Claude la usa solo cuando tu pedido encaja (por ejemplo «hazme un video de…»), o tú la llamas con `/nombre`.
 
+## 🧠 Cómo funciona
+
+```mermaid
+flowchart LR
+    A["instalar.sh / instalar.ps1"] -->|copia cada skill| B["~/.claude/skills/nombre"]
+    A -->|si ya existia| C["~/.claude/skills-respaldo/fecha"]
+    A -->|revisa| D["Node.js, Python, ffmpeg"]
+    B --> E["Claude Code"]
+    E -->|tu pedido encaja o escribes /nombre| F["Sigue el SKILL.md de la skill"]
+```
+
 ---
 
-## Instalar (1 minuto)
+## 🚀 Instalar (1 minuto)
 
 Necesitas tener [Claude Code](https://claude.com/claude-code) instalado. Elige una de estas tres opciones.
 
@@ -66,7 +100,7 @@ Al terminar, **cierra y vuelve a abrir Claude Code** y escribe `/` para ver las 
 
 ---
 
-## Qué trae
+## 📦 Qué trae
 
 ### 🎨 Diseño web: `skills/diseno-web/`
 
@@ -112,7 +146,7 @@ Al terminar, **cierra y vuelve a abrir Claude Code** y escribe `/` para ver las 
 
 ---
 
-## Requisitos
+## 📋 Requisitos
 
 | Herramienta | Para qué | Dónde |
 |---|---|---|
@@ -125,7 +159,7 @@ Las skills de diseño web solo necesitan Python (para el buscador de UI/UX Pro M
 
 ---
 
-## Personalizar
+## ⚙️ Personalizar
 
 - **Tu firma en los videos.** Algunos estilos de `/video` cierran con tu @ de redes. Por default sale `@tu_usuario`. Para poner el tuyo, define una variable de entorno:
   - Windows: `setx FIRMA_REDES "@mi_usuario"`
@@ -138,14 +172,14 @@ Las skills de diseño web solo necesitan Python (para el buscador de UI/UX Pro M
 
 ---
 
-## Actualizar y desinstalar
+## 🔄 Actualizar y desinstalar
 
 - **Actualizar:** vuelve a correr el comando de instalación. Lo que tenías queda respaldado en `~/.claude/skills-respaldo/`.
 - **Desinstalar una skill:** borra su carpeta en `~/.claude/skills/`. Por ejemplo, `~/.claude/skills/videoV2`.
 
 ---
 
-## Estructura del repo
+## 📂 Estructura del repo
 
 ```text
 alfa-skills/
@@ -165,8 +199,18 @@ Cada carpeta dentro de `skills/<grupo>/` es una skill completa con su `SKILL.md`
 
 ---
 
-## Créditos
+## 🙌 Créditos
 
 Las skills **diseno**, **diseno1.1**, **DisenoS**, **motion**, **video**, **videoV2** y **llm-council** (adaptación) son mías. Las demás son de proyectos abiertos y se incluyen con su licencia: HyperFrames y HeyGen, UI/UX Pro Max y taste-skill. El detalle está en [TERCEROS.md](TERCEROS.md).
 
-Hecho por **Alfa**.
+## 📄 Licencia
+
+MIT para las skills propias ([LICENSE](LICENSE)); las de terceros conservan la suya ([TERCEROS.md](TERCEROS.md)).
+
+---
+
+<div align="center">
+
+Hecho por **ALFA** · [@ALFA117](https://github.com/ALFA117)
+
+</div>
